@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Container } from "react-bootstrap";
+import { Button, Container } from "react-bootstrap";
 import Row from "./Row";
 import { generate } from "random-words";
 import ReactConfetti from "react-confetti";
@@ -12,6 +12,7 @@ const Grid = ({ setScore, setHighScore }) => {
   const [word, setWord] = useState([]);
   const [done, setDone] = useState([]);
   const [confetti, setConfetti] = useState(false);
+  const [lost, setLost] = useState(false);
   const { width, height } = useWindowSize();
 
   useEffect(() => {
@@ -26,11 +27,11 @@ const Grid = ({ setScore, setHighScore }) => {
         setConfetti(false);
       }
       let tempScore = 0;
-      answers.forEach((answer) => {
+      answers.forEach((answer, index) => {
         if (answer === "in correct spot") {
-          tempScore += 100;
+          tempScore += 100 * (6 - index) * (7 - Math.floor(counter / 6));
         } else if (answer === "correct letter") {
-          tempScore += 50;
+          tempScore += 30 * (6 - index) * (7 - Math.floor(counter / 6));
         }
       });
       setScore((prevScore) => prevScore + tempScore);
@@ -66,6 +67,10 @@ const Grid = ({ setScore, setHighScore }) => {
       ]);
       if (counter < 30) {
         setLetters([]);
+      } else {
+        if (!confetti) {
+          setLost(true);
+        }
       }
     }
   };
@@ -102,6 +107,24 @@ const Grid = ({ setScore, setHighScore }) => {
             cellWord={cellWord[row]}
           />
         ))}
+        {lost && (
+          <Button
+            variant="success"
+            className="mt-2"
+            onClick={() => {
+              setLetters([]);
+              setCounter(0);
+              setAnswers([]);
+              setCellWord([]);
+              setWord(generate({ minLength: 5, maxLength: 5 }).split(""));
+              setDone([]);
+              setConfetti(false);
+              setLost(false);
+            }}
+          >
+            Try again
+          </Button>
+        )}
       </Container>
     </>
   );

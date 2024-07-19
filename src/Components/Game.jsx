@@ -9,6 +9,7 @@ const Game = () => {
   useEffect(() => {
     if (score > highScore) {
       localStorage.setItem("highScore", score);
+      setHighScore(highScore);
     }
   }, [score]);
   return (
