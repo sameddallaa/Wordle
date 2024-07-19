@@ -1,11 +1,10 @@
 import React, { useEffect, useState } from "react";
 import { Row as GridRow, Col } from "react-bootstrap";
 import Cell from "./Cell";
-const Row = ({ row, answers, letters, turn, done }) => {
-  const [color, setColor] = useState("primary");
+
+const Row = ({ row, answers, letters, turn, done, cellWord }) => {
   useEffect(() => {
-    console.log(answers);
-    console.log(done);
+
   }, [answers]);
   return (
     <GridRow className={`py-1`}>
@@ -26,6 +25,7 @@ const Row = ({ row, answers, letters, turn, done }) => {
             letter={letters[col]}
             turn={turn}
             done={done}
+            cellLetter={cellWord && cellWord[col]}
           />
         </Col>
       ))}

@@ -1,13 +1,22 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
+import classes from "../CSS/Cell.module.css";
 
-const Cell = ({ letter = "", turn, color, done }) => {
-  console.log(done);
+const Cell = ({ letter = "", turn, color, done, cellLetter }) => {
+
+  const [cellColor, setCellColor] = useState();
+  useEffect(() => {
+    setCellColor(color);
+  }, [done]);
   return (
     <div
       style={{ width: "60px", height: "60px" }}
-      className={`bg-${color} rounded d-flex align-items-center justify-content-center`}
+      className={`bg-${
+        done ? cellColor + ` ${classes.animate}` : "primary"
+      } rounded d-flex align-items-center justify-content-center`}
     >
-      <span>{(turn || done) && letter}</span>
+      <span className="text-light">
+        {(cellLetter && cellLetter.letter) || ((turn || done) && letter)}
+      </span>
     </div>
   );
 };
